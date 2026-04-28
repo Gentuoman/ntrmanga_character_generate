@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>漫畫角色介紹編輯器</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#eceaf5;
+  --panel:#ffffff;
+  --surface:#f3f2fa;
+  --border:#dbd8ee;
+  --text:#19192e;
+  --dim:#7a789c;
+  --accent:#3b5bdb;
+  --accent-bg:rgba(59,91,219,.09);
+  --danger:#e03131;
+  --sidebar:284px;
+  --topbar:50px;
+}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden;font-size:13px}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#c8c5e0;border-radius:3px}
+
+/* TOP BAR */
+#topbar{height:var(--topbar);background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 14px;gap:8px;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.06);z-index:50}
+.brand{font-size:14px;font-weight:700;color:var(--accent);margin-right:4px;white-space:nowrap;letter-spacing:-.01em}
+.sep{width:1px;height:22px;background:var(--border);margin:0 3px;flex-shrink:0}
+.spacer{flex:1}
+.tlabel{font-size:11px;color:var(--dim);white-space:nowrap}
+select.zsel{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:4px 6px;border-radius:5px;font-size:12px;cursor:pointer;font-family:inherit}
+.btn{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:5px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit;white-space:nowrap;transition:all .12s;display:inline-flex;align-items:center;gap:5px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.btn:hover{background:var(--border)}
+.btn.pri{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:700}
+.btn.pri:hover{background:#2f4fc7}
+
+/* MAIN */
+#main{display:flex;flex:1;overflow:hidden}
+
+/* SIDEBAR */
+#sidebar{width:var(--sidebar);background:var(--panel);border-right:1px solid var(--border);overflow-y:auto;flex-shrink:0}
+.sec{border-bottom:1px solid var(--border)}
+.sec-h{padding:9px 14px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--dim);cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;background:var(--surface);transition:color .12s}
+.sec-h:hover{color:var(--text)}
+.sec-h .arr{transition:transform .18s;display:inline-block;font-style:normal}
+.sec.cls .sec-h .arr{transform:rotate(-90deg)}
+.sec-b{padding:10px 14px 14px;display:flex;flex-direction:column;gap:10px}
+.sec.cls .sec-b{display:none}
+.f{display:flex;flex-direction:column;gap:4px}
+.f>label{font-size:11px;color:var(--dim);font-weight:500}
+.f input[type=text],.f input[type=number],.f select,.f textarea{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:6px 8px;border-radius:5px;font-family:inherit;font-size:12px;width:100%;outline:none;transition:border-color .12s}
+.f input:focus,.f select:focus,.f textarea:focus{border-color:var(--accent)}
+.f input[type=color]{width:100%;height:30px;border:1px solid var(--border);border-radius:5px;background:var(--surface);cursor:pointer;padding:2px 3px}
+.row2{display:flex;gap:8px}
+.row2 .f{flex:1;min-width:0}
+.rng{display:flex;align-items:center;gap:8px}
+.rng input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer}
+.rng .v{font-size:11px;color:var(--dim);min-width:34px;text-align:right}
+.trow{display:flex;gap:5px}
+.tbtn{flex:1;padding:5px 3px;background:var(--surface);border:2px solid var(--border);border-radius:5px;cursor:pointer;text-align:center;font-size:12px;font-weight:700;color:var(--dim);transition:all .12s}
+.tbtn:hover{border-color:#b0aed0;color:var(--text)}
+.tbtn.on{border-color:var(--accent);color:var(--accent)}
+.tbtn.sm{font-size:11px;font-weight:400;border-width:1px}
+.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.sbtn{aspect-ratio:1;background:var(--surface);border:2px solid var(--border);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:6px;transition:all .12s;color:var(--dim)}
+.sbtn:hover{border-color:#b0aed0;color:var(--text)}
+.sbtn.on{border-color:var(--accent);background:var(--accent-bg);color:var(--accent)}
+.sbtn svg{width:100%;height:100%}
+/* char list */
+.clist{display:flex;flex-direction:column;gap:5px}
+.crow{background:var(--surface);border:1px solid transparent;border-radius:7px;padding:7px 8px;transition:border-color .12s}
+.crow:hover{border-color:var(--border)}
+.crow-top{display:flex;align-items:center;gap:7px}
+.cthumb{width:28px;height:28px;border-radius:50%;background:var(--border);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--dim)}
+.cthumb img{width:100%;height:100%;object-fit:cover}
+.cname-s{flex:1;font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cdel{background:none;border:none;color:var(--dim);cursor:pointer;padding:2px 5px;border-radius:3px;font-size:15px;line-height:1;transition:all .12s;flex-shrink:0}
+.cdel:hover{color:var(--danger);background:rgba(224,49,49,.09)}
+.crow-xy{display:flex;gap:6px;align-items:center;margin-top:5px;padding-top:5px;border-top:1px solid var(--border)}
+.crow-xy label{font-size:10px;color:var(--dim);font-weight:700;flex-shrink:0}
+.crow-xy input{width:58px;background:#fff;border:1px solid var(--border);color:var(--text);padding:3px 5px;border-radius:4px;font-family:inherit;font-size:11px;outline:none;transition:border-color .12s}
+.crow-xy input:focus{border-color:var(--accent)}
+.hint{font-size:10.5px;color:var(--dim);line-height:1.65}
+
+/* CANVAS AREA */
+#canvas-area{flex:1;overflow:auto;display:flex;align-items:flex-start;justify-content:center;padding:36px 36px 80px;background:var(--bg);background-image:radial-gradient(circle,rgba(0,0,0,.08) 1px,transparent 1px);background-size:22px 22px}
+#canvas-wrap{transform-origin:top center}
+#canvas{position:relative;overflow:hidden;background:#fff;box-shadow:0 4px 28px rgba(0,0,0,.14),0 0 0 1px rgba(0,0,0,.06)}
+
+/* canvas content */
+.cv-title{outline:none;cursor:text;position:relative;z-index:1}
+.cv-title:empty::before{content:attr(data-ph);color:#ccc;pointer-events:none}
+.cv-card{position:absolute;display:flex;flex-direction:column;align-items:center}
+.c-handle{width:100%;text-align:center;cursor:grab;font-size:13px;color:rgba(80,80,140,.38);padding:3px 0 5px;user-select:none;letter-spacing:.12em;line-height:1;transition:color .12s}
+.c-handle:hover{color:rgba(59,91,219,.5)}
+.c-handle:active{cursor:grabbing}
+.c-del{position:absolute;top:-9px;right:-9px;width:20px;height:20px;background:var(--danger);border:none;border-radius:50%;color:#fff;font-size:13px;line-height:1;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:20}
+.cv-card:hover .c-del{display:flex}
+.cv-fo{flex-shrink:0;position:relative;cursor:pointer}
+.cv-fi{position:absolute;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.uph{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;pointer-events:none;user-select:none}
+.uph span{font-size:10px;text-align:center;line-height:1.4;font-family:'Noto Sans JP',sans-serif}
+.cv-fi img{position:absolute;max-width:none;cursor:grab;user-select:none;pointer-events:all;z-index:2}
+.cv-fi img.drag{cursor:grabbing}
+.frep{position:absolute;bottom:5px;right:5px;width:22px;height:22px;background:rgba(0,0,0,.55);border-radius:50%;display:none;align-items:center;justify-content:center;font-size:11px;cursor:pointer;z-index:10}
+.cv-fo:hover .frep{display:flex}
+.cv-name{outline:none;cursor:text;font-weight:700;margin-top:8px}
+.cv-name:empty::before{content:'名前';color:#bbb;pointer-events:none}
+.cv-desc{outline:none;cursor:text;line-height:1.75;margin-top:5px}
+.cv-desc:empty::before{content:'説明';color:#bbb;pointer-events:none}
+
+/* PRINT */
+@media print{
+  body{background:white!important;height:auto;overflow:visible}
+  #topbar,#sidebar{display:none!important}
+  #canvas-area{padding:0!important;background:white!important;overflow:visible!important;display:block!important}
+  #canvas-wrap{zoom:1!important;transform:none!important}
+  #canvas{box-shadow:none!important}
+  .noprint{display:none!important}
+  .c-handle{display:none!important}
+}
+input[type=file]{display:none}
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <span class="brand">📖 漫畫角色介紹編輯器</span>
+  <div class="sep"></div>
+  <span class="tlabel">縮放</span>
+  <select class="zsel" id="zsel" onchange="setZoom(this.value)">
+    <option value="fit">自適應</option>
+    <option value="0.4">40%</option>
+    <option value="0.5">50%</option>
+    <option value="0.65">65%</option>
+    <option value="0.75">75%</option>
+    <option value="1" selected>100%</option>
+    <option value="1.25">125%</option>
+    <option value="1.5">150%</option>
+  </select>
+  <div class="spacer"></div>
+  <button class="btn noprint" onclick="exportPNG()">⬇ 匯出 PNG</button>
+  <button class="btn pri noprint" onclick="window.print()">🖨 列印 / PDF</button>
+</div>
+
+<div id="main">
+<div id="sidebar">
+
+<!-- 版面 -->
+<div class="sec" id="s1">
+  <div class="sec-h" onclick="tog('s1')"><span>📐 版面設定</span><i class="arr">▾</i></div>
+  <div class="sec-b">
+    <div class="f"><label>尺寸預設</label>
+      <select onchange="applyPreset(this.value)">
+        <option value="a4p">A4 直向（794×1123）</option>
+        <option value="a4l">A4 橫向（1123×794）</option>
+        <option value="a3p">A3 直向（1123×1587）</option>
+        <option value="b5">B5（668×944）</option>
+        <option value="sq">正方形（800×800）</option>
+        <option value="custom">自定義</option>
+      </select>
+    </div>
+    <div class="row2" id="csz" style="display:none">
+      <div class="f"><label>寬 px</label><input type="number" id="cwi" value="794" min="200" max="4000" onchange="applyCustom()"></div>
+      <div class="f"><label>高 px</label><input type="number" id="chi" value="1123" min="200" max="4000" onchange="applyCustom()"></div>
+    </div>
+    <div class="f"><label>背景色</label><input type="color" id="bgcp" value="#ffffff" oninput="lv_bg(this.value)"></div>
+    <div class="f"><label>內邊距 px</label>
+      <div class="rng"><input type="range" min="0" max="100" value="36" id="padR" oninput="lv_pad(this.value)"><span class="v" id="padV">36</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- 標題 -->
+<div class="sec" id="s2">
+  <div class="sec-h" onclick="tog('s2')"><span>✏️ 標題設定</span><i class="arr">▾</i></div>
+  <div class="sec-b">
+    <div class="f"><label>標題文字</label><input type="text" id="titleInp" value="登場人物紹介" oninput="lv_titleText(this.value)"></div>
+    <div class="f"><label>對齊</label>
+      <div class="trow" id="taG">
+        <div class="tbtn" data-v="left" onclick="tg('taG','left');S.titleAlign='left';qtitle(t=>t.style.textAlign='left')">左</div>
+        <div class="tbtn on" data-v="center" onclick="tg('taG','center');S.titleAlign='center';qtitle(t=>t.style.textAlign='center')">中</div>
+        <div class="tbtn" data-v="right" onclick="tg('taG','right');S.titleAlign='right';qtitle(t=>t.style.textAlign='right')">右</div>
+      </div>
+    </div>
+    <div class="f"><label>字體大小</label>
+      <div class="rng"><input type="range" min="14" max="80" value="32" id="tszR" oninput="S.titleSz=parseInt(this.value);document.getElementById('tszV').textContent=this.value;qtitle(t=>t.style.fontSize=this.value+'px')"><span class="v" id="tszV">32</span></div>
+    </div>
+    <div class="f"><label>顏色</label><input type="color" id="tcp" value="#000000" oninput="S.titleColor=this.value;qtitle(t=>t.style.color=this.value)"></div>
+    <div class="f"><label>字體</label>
+      <div class="trow" id="tfG">
+        <div class="tbtn on sm" data-v="serif" onclick="tg('tfG','serif');S.titleFont='serif';qtitle(t=>t.style.fontFamily=ff('serif'))">明朝體</div>
+        <div class="tbtn sm" data-v="sans" onclick="tg('tfG','sans');S.titleFont='sans';qtitle(t=>t.style.fontFamily=ff('sans'))">ゴシック</div>
+      </div>
+    </div>
+    <div class="f"><label>粗細</label>
+      <div class="trow" id="twG">
+        <div class="tbtn sm" data-v="400" onclick="tg('twG','400');S.titleWeight='400';qtitle(t=>t.style.fontWeight='400')">細</div>
+        <div class="tbtn on sm" data-v="700" onclick="tg('twG','700');S.titleWeight='700';qtitle(t=>t.style.fontWeight='700')">粗</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 角色 -->
+<div class="sec" id="s3">
+  <div class="sec-h" onclick="tog('s3')"><span>👥 角色管理</span><i class="arr">▾</i></div>
+  <div class="sec-b">
+    <div style="display:flex;gap:6px">
+      <button class="btn" style="flex:1;justify-content:center" onclick="addChar()">＋ 新增角色</button>
+      <button class="btn" style="flex:1;justify-content:center" onclick="autoArrange()" title="依欄數自動排列">⊞ 自動排列</button>
+    </div>
+    <div class="f"><label>自動排列欄數</label>
+      <div class="trow" id="colsG">
+        <div class="tbtn" data-v="1" onclick="tg('colsG','1');S.arrangeCols=1">１</div>
+        <div class="tbtn on" data-v="2" onclick="tg('colsG','2');S.arrangeCols=2">２</div>
+        <div class="tbtn" data-v="3" onclick="tg('colsG','3');S.arrangeCols=3">３</div>
+        <div class="tbtn" data-v="4" onclick="tg('colsG','4');S.arrangeCols=4">４</div>
+      </div>
+    </div>
+    <div class="f"><label>間距 px（自動排列時使用）</label>
+      <div class="rng"><input type="range" min="4" max="80" value="20" id="gapR" oninput="S.gap=parseInt(this.value);document.getElementById('gapV').textContent=this.value"><span class="v" id="gapV">20</span></div>
+    </div>
+    <div class="f"><label>角色列表</label>
+      <div class="clist" id="charList"></div>
+    </div>
+    <p class="hint">⠿ 拖曳把手可移動卡片位置<br>點擊圖框上傳圖片，雙擊圖片移除<br>拖曳圖片調整位置，滾輪縮放</p>
+  </div>
+</div>
+
+<!-- 外框 -->
+<div class="sec" id="s4">
+  <div class="sec-h" onclick="tog('s4')"><span>⬡ 外框設定</span><i class="arr">▾</i></div>
+  <div class="sec-b">
+    <div class="f"><label>外框形狀</label>
+      <div class="sgrid" id="shpG">
+        <div class="sbtn on" data-v="circle" onclick="setShape('circle')" title="圓形"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" fill="none" stroke="currentColor" stroke-width="3"/></svg></div>
+        <div class="sbtn" data-v="square" onclick="setShape('square')" title="方形"><svg viewBox="0 0 40 40"><rect x="4" y="4" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3"/></svg></div>
+        <div class="sbtn" data-v="rounded" onclick="setShape('rounded')" title="圓角"><svg viewBox="0 0 40 40"><rect x="4" y="4" width="32" height="32" rx="9" fill="none" stroke="currentColor" stroke-width="3"/></svg></div>
+        <div class="sbtn" data-v="diamond" onclick="setShape('diamond')" title="菱形"><svg viewBox="0 0 40 40"><polygon points="20,3 37,20 20,37 3,20" fill="none" stroke="currentColor" stroke-width="3"/></svg></div>
+        <div class="sbtn" data-v="hexagon" onclick="setShape('hexagon')" title="六角形"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 36,29 20,38 4,29 4,11" fill="none" stroke="currentColor" stroke-width="3"/></svg></div>
+        <div class="sbtn" data-v="shield" onclick="setShape('shield')" title="盾形"><svg viewBox="0 0 40 40"><path d="M20 3L36 10L36 24Q36 35 20 38Q4 35 4 24L4 10Z" fill="none" stroke="currentColor" stroke-width="3"/></svg></div>
+        <div class="sbtn" data-v="star" onclick="setShape('star')" title="星形"><svg viewBox="0 0 40 40"><polygon points="20,2 24,15 38,15 27,23 31,37 20,29 9,37 13,23 2,15 16,15" fill="none" stroke="currentColor" stroke-width="3"/></svg></div>
+        <div class="sbtn" data-v="oval" onclick="setShape('oval')" title="橢圓"><svg viewBox="0 0 40 40"><ellipse cx="20" cy="20" rx="17" ry="12" fill="none" stroke="currentColor" stroke-width="3"/></svg></div>
+      </div>
+    </div>
+    <div class="f"><label>圖框大小 px</label>
+      <div class="rng"><input type="range" min="60" max="320" value="160" id="fszR" oninput="upd_fsz(this.value)"><span class="v" id="fszV">160</span></div>
+    </div>
+    <div class="f"><label>邊框粗細 px</label>
+      <div class="rng"><input type="range" min="0" max="12" value="3" id="bwR" oninput="upd_bw(this.value)"><span class="v" id="bwV">3</span></div>
+    </div>
+    <div class="f"><label>邊框顏色</label><input type="color" id="bcp" value="#000000" oninput="S.borderColor=this.value;document.querySelectorAll('.cv-fo').forEach(e=>e.style.background=this.value)"></div>
+    <div class="f"><label>圖框底色</label><input type="color" id="fbgp" value="#f0f0f0" oninput="S.frameBg=this.value;document.querySelectorAll('.cv-fi').forEach(e=>e.style.background=this.value)"></div>
+  </div>
+</div>
+
+<!-- 文字 -->
+<div class="sec" id="s5">
+  <div class="sec-h" onclick="tog('s5')"><span>🔤 文字設定</span><i class="arr">▾</i></div>
+  <div class="sec-b">
+    <div class="f"><label>文字對齊</label>
+      <div class="trow" id="txaG">
+        <div class="tbtn" data-v="left" onclick="tg('txaG','left');S.textAlign='left';document.querySelectorAll('.cv-name,.cv-desc').forEach(e=>e.style.textAlign='left')">左</div>
+        <div class="tbtn on" data-v="center" onclick="tg('txaG','center');S.textAlign='center';document.querySelectorAll('.cv-name,.cv-desc').forEach(e=>e.style.textAlign='center')">中</div>
+        <div class="tbtn" data-v="right" onclick="tg('txaG','right');S.textAlign='right';document.querySelectorAll('.cv-name,.cv-desc').forEach(e=>e.style.textAlign='right')">右</div>
+      </div>
+    </div>
+    <div class="f"><label>名稱字體大小</label>
+      <div class="rng"><input type="range" min="10" max="42" value="18" id="nszR" oninput="S.nameSz=parseInt(this.value);document.getElementById('nszV').textContent=this.value;document.querySelectorAll('.cv-name').forEach(e=>e.style.fontSize=this.value+'px')"><span class="v" id="nszV">18</span></div>
+    </div>
+    <div class="f"><label>名稱顏色</label><input type="color" id="ncp" value="#000000" oninput="S.nameColor=this.value;document.querySelectorAll('.cv-name').forEach(e=>e.style.color=this.value)"></div>
+    <div class="f"><label>說明字體大小</label>
+      <div class="rng"><input type="range" min="8" max="30" value="12" id="dszR" oninput="S.descSz=parseInt(this.value);document.getElementById('dszV').textContent=this.value;document.querySelectorAll('.cv-desc').forEach(e=>e.style.fontSize=this.value+'px')"><span class="v" id="dszV">12</span></div>
+    </div>
+    <div class="f"><label>說明顏色</label><input type="color" id="dcp" value="#444444" oninput="S.descColor=this.value;document.querySelectorAll('.cv-desc').forEach(e=>e.style.color=this.value)"></div>
+    <div class="f"><label>字體</label>
+      <div class="trow" id="cfG">
+        <div class="tbtn on sm" data-v="serif" onclick="tg('cfG','serif');S.cardFont='serif';document.getElementById('canvas').style.fontFamily=ff('serif')">明朝體</div>
+        <div class="tbtn sm" data-v="sans" onclick="tg('cfG','sans');S.cardFont='sans';document.getElementById('canvas').style.fontFamily=ff('sans')">ゴシック</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /sidebar -->
+
+<div id="canvas-area">
+  <div id="canvas-wrap">
+    <div id="canvas"></div>
+  </div>
+</div>
+</div><!-- /main -->
+
+<input type="file" id="fileInput" accept="image/*">
+
+<script>
+/* STATE */
+const S={
+  cw:794,ch:1123,bgColor:'#ffffff',padding:36,gap:20,arrangeCols:2,
+  title:'登場人物紹介',titleSz:32,titleColor:'#000000',titleAlign:'center',titleFont:'serif',titleWeight:'700',
+  shape:'circle',frameSz:160,borderW:3,borderColor:'#000000',frameBg:'#f0f0f0',
+  nameSz:18,nameColor:'#000000',descSz:12,descColor:'#444444',textAlign:'center',cardFont:'serif',
+  chars:[
+    {id:1,name:'さとしくん',  desc:'かわいい少年\nお姉さんのことが好き',              x:0,y:0,img:null,ix:0,iy:0,is:1.2},
+    {id:2,name:'お姉さん',   desc:'さとしくんの絶望する\n姿を見たい性格破綻者\nさとしくんのことが好き',x:0,y:0,img:null,ix:0,iy:0,is:1.2},
+    {id:3,name:'たかしくん', desc:'さとしくんの絶望する\n姿を見たい性格破綻者\nそれ故にお姉さんを狙う\nさとしくんのことが好き',x:0,y:0,img:null,ix:0,iy:0,is:1.2},
+    {id:4,name:'思考囲い',   desc:'黒1マナ\nプレイヤー1人を対象とする。\nそのプレイヤーは自分の手札を公開する。',x:0,y:0,img:null,ix:0,iy:0,is:1.2},
+  ],
+  nid:5,
+};
+
+let ZL=1, pendId=null, imgDrag=null, cardDrag=null, rTimer=null;
+
+/* HELPERS */
+function clip(sh){return{circle:'circle(50% at 50% 50%)',square:'inset(0)',rounded:'inset(0 round 15px)',diamond:'polygon(50% 0%,100% 50%,50% 100%,0% 50%)',hexagon:'polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%)',shield:'polygon(50% 0%,95% 15%,95% 55%,50% 100%,5% 55%,5% 15%)',star:'polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)',oval:'ellipse(50% 40% at 50% 50%)'}[sh]||'circle(50% at 50% 50%)'}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function ff(t){return t==='serif'?"'Noto Serif JP',serif":"'Noto Sans JP',sans-serif"}
+function sched(){clearTimeout(rTimer);rTimer=setTimeout(render,90)}
+function qtitle(fn){const t=document.querySelector('.cv-title');if(t)fn(t)}
+function tg(gid,val){document.querySelectorAll(`#${gid} [data-v]`).forEach(el=>el.classList.toggle('on',el.dataset.v===val))}
+function tog(id){document.getElementById(id).classList.toggle('cls')}
+
+/* AUTO ARRANGE */
+function autoArrange(){
+  const p=S.padding,nc=S.arrangeCols,g=S.gap;
+  const fOut=S.frameSz+S.borderW*2;
+  const colW=(S.cw-2*p-(nc-1)*g)/nc;
+  const titleH=S.titleSz*1.7+p*1.5;
+  const cardH=fOut+S.nameSz*2.8+S.descSz*7+30;
+  S.chars.forEach((c,i)=>{
+    const col=i%nc,row=Math.floor(i/nc);
+    c.x=Math.round(p+col*(colW+g)+(colW-fOut)/2);
+    c.y=Math.round(titleH+row*(cardH+g));
+  });
+  render();
+}
+
+/* RENDER */
+function render(){
+  const cv=document.getElementById('canvas');
+  const bw=S.borderW,fsz=S.frameSz,out=fsz+bw*2;
+  const cp=clip(S.shape),cff=ff(S.cardFont),tff=ff(S.titleFont);
+  cv.style.cssText=`width:${S.cw}px;height:${S.ch}px;background:${S.bgColor};font-family:${cff}`;
+  let h='';
+  // title
+  h+=`<div class="cv-title" contenteditable="true" data-ph="タイトルを入力"
+    style="font-size:${S.titleSz}px;color:${S.titleColor};text-align:${S.titleAlign};font-family:${tff};font-weight:${S.titleWeight};padding:${S.padding}px ${S.padding}px ${Math.round(S.padding*.35)}px;line-height:1.3;"
+    oninput="S.title=this.innerText;document.getElementById('titleInp').value=S.title"
+    onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()}"
+  >${esc(S.title)}</div>`;
+  // cards
+  for(const c of S.chars){
+    h+=`<div class="cv-card" data-id="${c.id}" style="left:${c.x}px;top:${c.y}px;width:${out}px;">`;
+    h+=`<button class="c-del noprint" onclick="delChar(${c.id},event)">×</button>`;
+    h+=`<div class="c-handle noprint" data-id="${c.id}">⠿ ⠿ ⠿</div>`;
+    // frame
+    const outerBg=bw>0?S.borderColor:'transparent';
+    h+=`<div class="cv-fo" data-id="${c.id}" onclick="frameClick(${c.id},event)" onwheel="frameWheel(${c.id},event)" style="width:${out}px;height:${out}px;background:${outerBg};clip-path:${bw>0?cp:'none'};">`;
+    h+=`<div class="cv-fi" data-id="${c.id}" style="inset:${bw}px;clip-path:${cp};background:${S.frameBg};">`;
+    if(c.img){
+      h+=`<img src="${c.img}" data-id="${c.id}" style="width:${Math.round(fsz*c.is)}px;top:50%;left:50%;transform:translate(calc(-50% + ${c.ix}px),calc(-50% + ${c.iy}px));" onmousedown="startImgDrag(${c.id},event)" ondblclick="clearImg(${c.id},event)" ondragstart="return false">`;
+    }else{
+      h+=`<div class="uph"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><span style="color:#bbb">クリックで<br>画像追加</span></div>`;
+    }
+    h+=`</div>`;
+    if(c.img)h+=`<div class="frep noprint" onclick="replaceImg(${c.id},event)">🔄</div>`;
+    h+=`</div>`;
+    // text
+    h+=`<div class="cv-name" contenteditable="true" data-id="${c.id}" style="font-size:${S.nameSz}px;color:${S.nameColor};text-align:${S.textAlign};width:100%;" oninput="onName(${c.id},this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()}">${esc(c.name)}</div>`;
+    h+=`<div class="cv-desc" contenteditable="true" data-id="${c.id}" style="font-size:${S.descSz}px;color:${S.descColor};text-align:${S.textAlign};width:100%;" oninput="onDesc(${c.id},this)" onkeydown="handleDescKey(event)">${esc(c.desc).replace(/\n/g,'<br>')}</div>`;
+    h+=`</div>`;
+  }
+  cv.innerHTML=h;
+  renderSidebar();
+}
+
+/* SIDEBAR */
+function renderSidebar(){
+  document.getElementById('charList').innerHTML=S.chars.map(c=>`
+    <div class="crow" data-id="${c.id}">
+      <div class="crow-top">
+        <div class="cthumb">${c.img?`<img src="${c.img}">`:'?'}</div>
+        <span class="cname-s">${esc(c.name)||'（無名稱）'}</span>
+        <button class="cdel" onclick="delChar(${c.id},event)">×</button>
+      </div>
+      <div class="crow-xy">
+        <label>X</label><input type="number" id="xi${c.id}" value="${Math.round(c.x)}" onchange="setCP(${c.id},'x',+this.value)">
+        <label>Y</label><input type="number" id="yi${c.id}" value="${Math.round(c.y)}" onchange="setCP(${c.id},'y',+this.value)">
+      </div>
+    </div>
+  `).join('');
+}
+
+function setCP(id,ax,v){
+  const c=S.chars.find(c=>c.id===id);if(!c)return;
+  c[ax]=v;
+  const el=document.querySelector(`.cv-card[data-id="${id}"]`);
+  if(el)el.style[ax==='x'?'left':'top']=v+'px';
+}
+
+function refreshXY(id){
+  const c=S.chars.find(c=>c.id===id);if(!c)return;
+  const xi=document.getElementById('xi'+id),yi=document.getElementById('yi'+id);
+  if(xi)xi.value=Math.round(c.x);if(yi)yi.value=Math.round(c.y);
+}
+
+/* CHAR */
+function addChar(){
+  S.chars.push({id:S.nid++,name:'新キャラ',desc:'説明文',x:S.padding,y:S.padding+100,img:null,ix:0,iy:0,is:1.2});
+  render();
+}
+function delChar(id,e){
+  if(e)e.stopPropagation();
+  if(S.chars.length<=1)return;
+  S.chars=S.chars.filter(c=>c.id!==id);render();
+}
+function onName(id,el){const c=S.chars.find(c=>c.id===id);if(c){c.name=el.innerText;renderSidebar()}}
+function onDesc(id,el){const c=S.chars.find(c=>c.id===id);if(c)c.desc=el.innerText}
+function handleDescKey(e){if(e.key==='Enter'){e.preventDefault();document.execCommand('insertHTML',false,'<br>')}}
+
+/* IMAGE */
+function frameClick(id,e){if(e.target.tagName==='IMG')return;pendId=id;document.getElementById('fileInput').click();e.stopPropagation()}
+function replaceImg(id,e){e.stopPropagation();pendId=id;document.getElementById('fileInput').click()}
+function clearImg(id,e){if(e)e.stopPropagation();const c=S.chars.find(c=>c.id===id);if(c){c.img=null;c.ix=0;c.iy=0;c.is=1.2;render()}}
+document.getElementById('fileInput').addEventListener('change',function(e){
+  const file=e.target.files[0];if(!file||pendId===null)return;
+  const r=new FileReader();
+  r.onload=ev=>{const c=S.chars.find(c=>c.id===pendId);if(c){c.img=ev.target.result;c.ix=0;c.iy=0;c.is=1.2;render()}pendId=null};
+  r.readAsDataURL(file);this.value='';
+});
+function startImgDrag(id,e){
+  const c=S.chars.find(c=>c.id===id);if(!c)return;
+  e.preventDefault();e.stopPropagation();e.target.classList.add('drag');
+  imgDrag={id,sx:e.clientX,sy:e.clientY,ox:c.ix,oy:c.iy};
+}
+function frameWheel(id,e){
+  e.preventDefault();const c=S.chars.find(c=>c.id===id);if(!c||!c.img)return;
+  c.is=Math.max(.2,Math.min(6,c.is+(e.deltaY>0?-.06:.06)));
+  const img=document.querySelector(`.cv-fi[data-id="${id}"] img`);
+  if(img)img.style.width=Math.round(S.frameSz*c.is)+'px';
+}
+
+/* MOUSE EVENTS */
+document.addEventListener('mousedown',e=>{
+  const h=e.target.closest('.c-handle');
+  if(h){
+    const id=parseInt(h.dataset.id);const c=S.chars.find(c=>c.id===id);if(!c)return;
+    e.preventDefault();
+    cardDrag={id,sx:e.clientX,sy:e.clientY,ox:c.x,oy:c.y};
+  }
+});
+document.addEventListener('mousemove',e=>{
+  if(cardDrag){
+    const dx=(e.clientX-cardDrag.sx)/ZL,dy=(e.clientY-cardDrag.sy)/ZL;
+    const c=S.chars.find(c=>c.id===cardDrag.id);if(!c)return;
+    c.x=Math.round(cardDrag.ox+dx);c.y=Math.round(cardDrag.oy+dy);
+    const el=document.querySelector(`.cv-card[data-id="${cardDrag.id}"]`);
+    if(el){el.style.left=c.x+'px';el.style.top=c.y+'px'}
+    refreshXY(cardDrag.id);return;
+  }
+  if(imgDrag){
+    const dx=(e.clientX-imgDrag.sx)/ZL,dy=(e.clientY-imgDrag.sy)/ZL;
+    const c=S.chars.find(c=>c.id===imgDrag.id);if(!c)return;
+    c.ix=imgDrag.ox+dx;c.iy=imgDrag.oy+dy;
+    const img=document.querySelector(`.cv-fi[data-id="${imgDrag.id}"] img`);
+    if(img)img.style.transform=`translate(calc(-50% + ${c.ix}px),calc(-50% + ${c.iy}px))`;
+  }
+});
+document.addEventListener('mouseup',()=>{
+  document.querySelectorAll('.cv-fi img').forEach(el=>el.classList.remove('drag'));
+  cardDrag=null;imgDrag=null;
+});
+
+/* FRAME SIZE & BORDER WIDTH — require full re-render */
+function upd_fsz(v){S.frameSz=parseInt(v);document.getElementById('fszV').textContent=v;sched()}
+function upd_bw(v){S.borderW=parseInt(v);document.getElementById('bwV').textContent=v;sched()}
+function setShape(v){S.shape=v;tg('shpG',v);sched()}
+
+/* CANVAS SIZE */
+const PRE={a4p:[794,1123],a4l:[1123,794],a3p:[1123,1587],b5:[668,944],sq:[800,800]};
+function applyPreset(v){
+  document.getElementById('csz').style.display=v==='custom'?'flex':'none';
+  if(v!=='custom'&&PRE[v]){[S.cw,S.ch]=PRE[v];document.getElementById('cwi').value=S.cw;document.getElementById('chi').value=S.ch;autoArrange();if(document.getElementById('zsel').value==='fit')doFit()}
+}
+function applyCustom(){S.cw=parseInt(document.getElementById('cwi').value)||794;S.ch=parseInt(document.getElementById('chi').value)||1123;render();if(document.getElementById('zsel').value==='fit')doFit()}
+function lv_bg(v){S.bgColor=v;document.getElementById('canvas').style.background=v}
+function lv_pad(v){S.padding=parseInt(v);document.getElementById('padV').textContent=v;qtitle(t=>t.style.padding=`${S.padding}px ${S.padding}px ${Math.round(S.padding*.35)}px`)}
+function lv_titleText(v){S.title=v;qtitle(t=>{if(t.innerText.trim()!==v.trim())t.innerText=v})}
+
+/* ZOOM */
+function setZoom(v){if(v==='fit')doFit();else applyZoom(parseFloat(v))}
+function applyZoom(s){ZL=s;document.getElementById('canvas-wrap').style.zoom=s}
+function doFit(){const a=document.getElementById('canvas-area');const s=Math.min((a.clientWidth-72)/S.cw,(a.clientHeight-72)/S.ch,1);applyZoom(Math.max(.2,s))}
+
+/* EXPORT */
+async function exportPNG(){
+  document.querySelectorAll('.noprint').forEach(el=>el.style.visibility='hidden');
+  const w=document.getElementById('canvas-wrap'),pz=w.style.zoom;w.style.zoom='1';
+  await new Promise(r=>setTimeout(r,100));
+  try{
+    const cvs=await html2canvas(document.getElementById('canvas'),{scale:2,backgroundColor:S.bgColor,width:S.cw,height:S.ch,useCORS:true,allowTaint:true});
+    const a=document.createElement('a');a.download='登場人物紹介.png';a.href=cvs.toDataURL('image/png');a.click();
+  }catch(err){alert('匯出失敗，請使用列印。\n'+err.message)}
+  w.style.zoom=pz;document.querySelectorAll('.noprint').forEach(el=>el.style.visibility='');
+}
+
+/* INIT */
+window.addEventListener('load',()=>{autoArrange();doFit();document.getElementById('zsel').value='fit'});
+window.addEventListener('resize',()=>{if(document.getElementById('zsel').value==='fit')doFit()});
+</script>
+</body>
+</html>
