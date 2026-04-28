@@ -9,17 +9,9 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#eceaf5;
-  --panel:#ffffff;
-  --surface:#f3f2fa;
-  --border:#dbd8ee;
-  --text:#19192e;
-  --dim:#7a789c;
-  --accent:#3b5bdb;
-  --accent-bg:rgba(59,91,219,.09);
-  --danger:#e03131;
-  --sidebar:284px;
-  --topbar:50px;
+  --bg:#eceaf5;--panel:#fff;--surface:#f3f2fa;--border:#dbd8ee;
+  --text:#19192e;--dim:#7a789c;--accent:#3b5bdb;--accent-bg:rgba(59,91,219,.09);
+  --danger:#e03131;--success:#16a34a;--sidebar:284px;--topbar:50px;
 }
 body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden;font-size:13px}
 ::-webkit-scrollbar{width:5px;height:5px}
@@ -28,7 +20,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 
 /* TOP BAR */
 #topbar{height:var(--topbar);background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 14px;gap:8px;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.06);z-index:50}
-.brand{font-size:14px;font-weight:700;color:var(--accent);margin-right:4px;white-space:nowrap;letter-spacing:-.01em}
+.brand{font-size:14px;font-weight:700;color:var(--accent);margin-right:4px;white-space:nowrap}
 .sep{width:1px;height:22px;background:var(--border);margin:0 3px;flex-shrink:0}
 .spacer{flex:1}
 .tlabel{font-size:11px;color:var(--dim);white-space:nowrap}
@@ -37,6 +29,7 @@ select.zsel{background:var(--surface);border:1px solid var(--border);color:var(-
 .btn:hover{background:var(--border)}
 .btn.pri{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:700}
 .btn.pri:hover{background:#2f4fc7}
+.btn.sm{padding:4px 9px;font-size:11px}
 
 /* MAIN */
 #main{display:flex;flex:1;overflow:hidden}
@@ -46,14 +39,14 @@ select.zsel{background:var(--surface);border:1px solid var(--border);color:var(-
 .sec{border-bottom:1px solid var(--border)}
 .sec-h{padding:9px 14px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--dim);cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;background:var(--surface);transition:color .12s}
 .sec-h:hover{color:var(--text)}
-.sec-h .arr{transition:transform .18s;display:inline-block;font-style:normal}
+.sec-h .arr{transition:transform .18s;display:inline-block}
 .sec.cls .sec-h .arr{transform:rotate(-90deg)}
 .sec-b{padding:10px 14px 14px;display:flex;flex-direction:column;gap:10px}
 .sec.cls .sec-b{display:none}
 .f{display:flex;flex-direction:column;gap:4px}
 .f>label{font-size:11px;color:var(--dim);font-weight:500}
-.f input[type=text],.f input[type=number],.f select,.f textarea{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:6px 8px;border-radius:5px;font-family:inherit;font-size:12px;width:100%;outline:none;transition:border-color .12s}
-.f input:focus,.f select:focus,.f textarea:focus{border-color:var(--accent)}
+.f input[type=text],.f input[type=number],.f select{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:6px 8px;border-radius:5px;font-family:inherit;font-size:12px;width:100%;outline:none;transition:border-color .12s}
+.f input:focus,.f select:focus{border-color:var(--accent)}
 .f input[type=color]{width:100%;height:30px;border:1px solid var(--border);border-radius:5px;background:var(--surface);cursor:pointer;padding:2px 3px}
 .row2{display:flex;gap:8px}
 .row2 .f{flex:1;min-width:0}
@@ -70,7 +63,8 @@ select.zsel{background:var(--surface);border:1px solid var(--border);color:var(-
 .sbtn:hover{border-color:#b0aed0;color:var(--text)}
 .sbtn.on{border-color:var(--accent);background:var(--accent-bg);color:var(--accent)}
 .sbtn svg{width:100%;height:100%}
-/* char list */
+
+/* CHAR LIST */
 .clist{display:flex;flex-direction:column;gap:5px}
 .crow{background:var(--surface);border:1px solid transparent;border-radius:7px;padding:7px 8px;transition:border-color .12s}
 .crow:hover{border-color:var(--border)}
@@ -82,8 +76,25 @@ select.zsel{background:var(--surface);border:1px solid var(--border);color:var(-
 .cdel:hover{color:var(--danger);background:rgba(224,49,49,.09)}
 .crow-xy{display:flex;gap:6px;align-items:center;margin-top:5px;padding-top:5px;border-top:1px solid var(--border)}
 .crow-xy label{font-size:10px;color:var(--dim);font-weight:700;flex-shrink:0}
-.crow-xy input{width:58px;background:#fff;border:1px solid var(--border);color:var(--text);padding:3px 5px;border-radius:4px;font-family:inherit;font-size:11px;outline:none;transition:border-color .12s}
+.crow-xy input{width:58px;background:#fff;border:1px solid var(--border);color:var(--text);padding:3px 5px;border-radius:4px;font-family:inherit;font-size:11px;outline:none}
 .crow-xy input:focus{border-color:var(--accent)}
+.crow-url{display:flex;align-items:center;gap:5px;margin-top:5px}
+.crow-url label{font-size:10px;color:var(--dim);font-weight:700;flex-shrink:0;white-space:nowrap}
+.crow-url input{flex:1;min-width:0;background:#fff;border:1px solid var(--border);color:var(--text);padding:3px 5px;border-radius:4px;font-family:inherit;font-size:11px;outline:none}
+.crow-url input:focus{border-color:var(--accent)}
+.crow-url .ub{background:var(--surface);border:1px solid var(--border);color:var(--dim);padding:3px 6px;border-radius:4px;cursor:pointer;font-size:12px;flex-shrink:0;transition:all .12s}
+.crow-url .ub:hover{color:var(--text);border-color:#b0aed0}
+
+/* EXPORT section */
+.exp-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.exp-btn{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:8px 6px;border-radius:6px;cursor:pointer;text-align:center;font-size:11px;font-family:inherit;transition:all .12s;display:flex;flex-direction:column;align-items:center;gap:3px}
+.exp-btn:hover{background:var(--border);border-color:#b0aed0}
+.exp-btn .ico{font-size:18px;line-height:1}
+.exp-btn .lbl{font-weight:600;font-size:10.5px}
+.exp-btn .sub{font-size:9.5px;color:var(--dim)}
+.exp-btn.featured{border-color:var(--accent);background:var(--accent-bg);color:var(--accent)}
+.exp-btn.featured .sub{color:var(--accent);opacity:.7}
+
 .hint{font-size:10.5px;color:var(--dim);line-height:1.65}
 
 /* CANVAS AREA */
@@ -95,7 +106,7 @@ select.zsel{background:var(--surface);border:1px solid var(--border);color:var(-
 .cv-title{outline:none;cursor:text;position:relative;z-index:1}
 .cv-title:empty::before{content:attr(data-ph);color:#ccc;pointer-events:none}
 .cv-card{position:absolute;display:flex;flex-direction:column;align-items:center}
-.c-handle{width:100%;text-align:center;cursor:grab;font-size:13px;color:rgba(80,80,140,.38);padding:3px 0 5px;user-select:none;letter-spacing:.12em;line-height:1;transition:color .12s}
+.c-handle{width:100%;text-align:center;cursor:grab;font-size:13px;color:rgba(80,80,140,.35);padding:3px 0 5px;user-select:none;letter-spacing:.12em;line-height:1;transition:color .12s}
 .c-handle:hover{color:rgba(59,91,219,.5)}
 .c-handle:active{cursor:grabbing}
 .c-del{position:absolute;top:-9px;right:-9px;width:20px;height:20px;background:var(--danger);border:none;border-radius:50%;color:#fff;font-size:13px;line-height:1;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:20}
@@ -113,10 +124,23 @@ select.zsel{background:var(--surface);border:1px solid var(--border);color:var(-
 .cv-desc{outline:none;cursor:text;line-height:1.75;margin-top:5px}
 .cv-desc:empty::before{content:'説明';color:#bbb;pointer-events:none}
 
+/* HTML OUTPUT MODAL */
+#hModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center}
+.hModal-box{background:#fff;width:700px;max-width:92vw;max-height:85vh;border-radius:12px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,.28)}
+.hModal-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.hModal-title{font-weight:700;font-size:14px;color:var(--text)}
+.hModal-close{background:none;border:none;font-size:20px;color:var(--dim);cursor:pointer;padding:0 4px;line-height:1;transition:color .12s}
+.hModal-close:hover{color:var(--danger)}
+.hModal-body{flex:1;overflow:auto;padding:14px}
+#htmlOut{width:100%;height:320px;font-family:'SFMono-Regular',Consolas,monospace;font-size:11.5px;border:1px solid var(--border);border-radius:6px;padding:10px;color:#333;resize:vertical;background:var(--surface);outline:none;line-height:1.55}
+#htmlOut:focus{border-color:var(--accent)}
+.hModal-foot{padding:12px 18px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0}
+#copyMsg{font-size:12px;color:var(--success);display:none}
+
 /* PRINT */
 @media print{
   body{background:white!important;height:auto;overflow:visible}
-  #topbar,#sidebar{display:none!important}
+  #topbar,#sidebar,#hModal{display:none!important}
   #canvas-area{padding:0!important;background:white!important;overflow:visible!important;display:block!important}
   #canvas-wrap{zoom:1!important;transform:none!important}
   #canvas{box-shadow:none!important}
@@ -128,22 +152,20 @@ input[type=file]{display:none}
 </head>
 <body>
 
+<!-- TOP BAR -->
 <div id="topbar">
   <span class="brand">📖 漫畫角色介紹編輯器</span>
   <div class="sep"></div>
   <span class="tlabel">縮放</span>
   <select class="zsel" id="zsel" onchange="setZoom(this.value)">
     <option value="fit">自適應</option>
-    <option value="0.4">40%</option>
-    <option value="0.5">50%</option>
-    <option value="0.65">65%</option>
-    <option value="0.75">75%</option>
+    <option value="0.4">40%</option><option value="0.5">50%</option>
+    <option value="0.65">65%</option><option value="0.75">75%</option>
     <option value="1" selected>100%</option>
-    <option value="1.25">125%</option>
-    <option value="1.5">150%</option>
+    <option value="1.25">125%</option><option value="1.5">150%</option>
   </select>
   <div class="spacer"></div>
-  <button class="btn noprint" onclick="exportPNG()">⬇ 匯出 PNG</button>
+  <button class="btn noprint" onclick="exportPNG()">⬇ PNG</button>
   <button class="btn pri noprint" onclick="window.print()">🖨 列印 / PDF</button>
 </div>
 
@@ -152,10 +174,10 @@ input[type=file]{display:none}
 
 <!-- 版面 -->
 <div class="sec" id="s1">
-  <div class="sec-h" onclick="tog('s1')"><span>📐 版面設定</span><i class="arr">▾</i></div>
+  <div class="sec-h" onclick="tog('s1')"><span>📐 版面設定</span><span class="arr">▾</span></div>
   <div class="sec-b">
     <div class="f"><label>尺寸預設</label>
-      <select onchange="applyPreset(this.value)">
+      <select onchange="applyPreset(this.value)" id="presetSel">
         <option value="a4p">A4 直向（794×1123）</option>
         <option value="a4l">A4 橫向（1123×794）</option>
         <option value="a3p">A3 直向（1123×1587）</option>
@@ -177,7 +199,7 @@ input[type=file]{display:none}
 
 <!-- 標題 -->
 <div class="sec" id="s2">
-  <div class="sec-h" onclick="tog('s2')"><span>✏️ 標題設定</span><i class="arr">▾</i></div>
+  <div class="sec-h" onclick="tog('s2')"><span>✏️ 標題設定</span><span class="arr">▾</span></div>
   <div class="sec-b">
     <div class="f"><label>標題文字</label><input type="text" id="titleInp" value="登場人物紹介" oninput="lv_titleText(this.value)"></div>
     <div class="f"><label>對齊</label>
@@ -208,11 +230,11 @@ input[type=file]{display:none}
 
 <!-- 角色 -->
 <div class="sec" id="s3">
-  <div class="sec-h" onclick="tog('s3')"><span>👥 角色管理</span><i class="arr">▾</i></div>
+  <div class="sec-h" onclick="tog('s3')"><span>👥 角色管理</span><span class="arr">▾</span></div>
   <div class="sec-b">
     <div style="display:flex;gap:6px">
       <button class="btn" style="flex:1;justify-content:center" onclick="addChar()">＋ 新增角色</button>
-      <button class="btn" style="flex:1;justify-content:center" onclick="autoArrange()" title="依欄數自動排列">⊞ 自動排列</button>
+      <button class="btn" style="flex:1;justify-content:center" onclick="autoArrange()">⊞ 自動排列</button>
     </div>
     <div class="f"><label>自動排列欄數</label>
       <div class="trow" id="colsG">
@@ -222,19 +244,17 @@ input[type=file]{display:none}
         <div class="tbtn" data-v="4" onclick="tg('colsG','4');S.arrangeCols=4">４</div>
       </div>
     </div>
-    <div class="f"><label>間距 px（自動排列時使用）</label>
+    <div class="f"><label>排列間距 px</label>
       <div class="rng"><input type="range" min="4" max="80" value="20" id="gapR" oninput="S.gap=parseInt(this.value);document.getElementById('gapV').textContent=this.value"><span class="v" id="gapV">20</span></div>
     </div>
-    <div class="f"><label>角色列表</label>
-      <div class="clist" id="charList"></div>
-    </div>
-    <p class="hint">⠿ 拖曳把手可移動卡片位置<br>點擊圖框上傳圖片，雙擊圖片移除<br>拖曳圖片調整位置，滾輪縮放</p>
+    <div class="f"><label>角色列表</label><div class="clist" id="charList"></div></div>
+    <p class="hint">⠿ 拖曳把手移動卡片　點擊圖框上傳圖片<br>雙擊圖片移除　滾輪縮放圖片</p>
   </div>
 </div>
 
 <!-- 外框 -->
 <div class="sec" id="s4">
-  <div class="sec-h" onclick="tog('s4')"><span>⬡ 外框設定</span><i class="arr">▾</i></div>
+  <div class="sec-h" onclick="tog('s4')"><span>⬡ 外框設定</span><span class="arr">▾</span></div>
   <div class="sec-b">
     <div class="f"><label>外框形狀</label>
       <div class="sgrid" id="shpG">
@@ -261,7 +281,7 @@ input[type=file]{display:none}
 
 <!-- 文字 -->
 <div class="sec" id="s5">
-  <div class="sec-h" onclick="tog('s5')"><span>🔤 文字設定</span><i class="arr">▾</i></div>
+  <div class="sec-h" onclick="tog('s5')"><span>🔤 文字設定</span><span class="arr">▾</span></div>
   <div class="sec-b">
     <div class="f"><label>文字對齊</label>
       <div class="trow" id="txaG">
@@ -270,11 +290,11 @@ input[type=file]{display:none}
         <div class="tbtn" data-v="right" onclick="tg('txaG','right');S.textAlign='right';document.querySelectorAll('.cv-name,.cv-desc').forEach(e=>e.style.textAlign='right')">右</div>
       </div>
     </div>
-    <div class="f"><label>名稱字體大小</label>
+    <div class="f"><label>名稱大小</label>
       <div class="rng"><input type="range" min="10" max="42" value="18" id="nszR" oninput="S.nameSz=parseInt(this.value);document.getElementById('nszV').textContent=this.value;document.querySelectorAll('.cv-name').forEach(e=>e.style.fontSize=this.value+'px')"><span class="v" id="nszV">18</span></div>
     </div>
     <div class="f"><label>名稱顏色</label><input type="color" id="ncp" value="#000000" oninput="S.nameColor=this.value;document.querySelectorAll('.cv-name').forEach(e=>e.style.color=this.value)"></div>
-    <div class="f"><label>說明字體大小</label>
+    <div class="f"><label>說明大小</label>
       <div class="rng"><input type="range" min="8" max="30" value="12" id="dszR" oninput="S.descSz=parseInt(this.value);document.getElementById('dszV').textContent=this.value;document.querySelectorAll('.cv-desc').forEach(e=>e.style.fontSize=this.value+'px')"><span class="v" id="dszV">12</span></div>
     </div>
     <div class="f"><label>說明顏色</label><input type="color" id="dcp" value="#444444" oninput="S.descColor=this.value;document.querySelectorAll('.cv-desc').forEach(e=>e.style.color=this.value)"></div>
@@ -287,6 +307,24 @@ input[type=file]{display:none}
   </div>
 </div>
 
+<!-- 匯出 -->
+<div class="sec" id="s6">
+  <div class="sec-h" onclick="tog('s6')"><span>💾 匯出 / 儲存</span><span class="arr">▾</span></div>
+  <div class="sec-b">
+    <div class="exp-grid">
+      <button class="exp-btn" onclick="exportPNG()"><span class="ico">🖼</span><span class="lbl">PNG</span><span class="sub">點陣圖（高清）</span></button>
+      <button class="exp-btn" onclick="exportJPG()"><span class="ico">📷</span><span class="lbl">JPG</span><span class="sub">點陣圖（壓縮）</span></button>
+      <button class="exp-btn" onclick="exportSVG()"><span class="ico">✦</span><span class="lbl">SVG</span><span class="sub">向量圖形</span></button>
+      <button class="exp-btn featured" onclick="showHTMLModal()"><span class="ico">⟨/⟩</span><span class="lbl">HTML 片段</span><span class="sub">Caveduck 相容</span></button>
+    </div>
+    <div style="display:flex;gap:6px;margin-top:2px">
+      <button class="btn" style="flex:1;justify-content:center;font-size:11px" onclick="saveJSON()">⬇ JSON 設定檔</button>
+      <button class="btn" style="flex:1;justify-content:center;font-size:11px" onclick="document.getElementById('jsonInput').click()">⬆ 載入 JSON</button>
+    </div>
+    <p class="hint">PNG/JPG/SVG 輸出為目前畫布的完整內容。JSON 可儲存所有設定並重新載入。HTML 輸出符合 Caveduck 嵌入規格。</p>
+  </div>
+</div>
+
 </div><!-- /sidebar -->
 
 <div id="canvas-area">
@@ -296,39 +334,63 @@ input[type=file]{display:none}
 </div>
 </div><!-- /main -->
 
+<!-- HTML OUTPUT MODAL -->
+<div id="hModal">
+  <div class="hModal-box">
+    <div class="hModal-head">
+      <span class="hModal-title">⟨/⟩ HTML 片段輸出（Caveduck / AIRP 相容）</span>
+      <button class="hModal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="hModal-body">
+      <textarea id="htmlOut" readonly spellcheck="false"></textarea>
+    </div>
+    <div class="hModal-foot">
+      <button class="btn pri" onclick="copyHTML()">📋 複製到剪貼簿</button>
+      <span id="copyMsg">✓ 已複製！</span>
+      <div style="flex:1"></div>
+      <span style="font-size:10.5px;color:var(--dim)">僅含 inline style，無 class / id / script</span>
+    </div>
+  </div>
+</div>
+
 <input type="file" id="fileInput" accept="image/*">
+<input type="file" id="jsonInput" accept=".json,application/json">
 
 <script>
-/* STATE */
-const S={
-  cw:794,ch:1123,bgColor:'#ffffff',padding:36,gap:20,arrangeCols:2,
-  title:'登場人物紹介',titleSz:32,titleColor:'#000000',titleAlign:'center',titleFont:'serif',titleWeight:'700',
-  shape:'circle',frameSz:160,borderW:3,borderColor:'#000000',frameBg:'#f0f0f0',
-  nameSz:18,nameColor:'#000000',descSz:12,descColor:'#444444',textAlign:'center',cardFont:'serif',
+/* ═══════════════ STATE ═══════════════ */
+const S = {
+  cw:794, ch:1123, bgColor:'#ffffff', padding:36, gap:20, arrangeCols:2,
+  title:'登場人物紹介',
+  titleSz:32, titleColor:'#000000', titleAlign:'center', titleFont:'serif', titleWeight:'700',
+  shape:'circle', frameSz:160, borderW:3, borderColor:'#000000', frameBg:'#f0f0f0',
+  nameSz:18, nameColor:'#000000', descSz:12, descColor:'#444444',
+  textAlign:'center', cardFont:'serif',
   chars:[
-    {id:1,name:'さとしくん',  desc:'かわいい少年\nお姉さんのことが好き',              x:0,y:0,img:null,ix:0,iy:0,is:1.2},
-    {id:2,name:'お姉さん',   desc:'さとしくんの絶望する\n姿を見たい性格破綻者\nさとしくんのことが好き',x:0,y:0,img:null,ix:0,iy:0,is:1.2},
-    {id:3,name:'たかしくん', desc:'さとしくんの絶望する\n姿を見たい性格破綻者\nそれ故にお姉さんを狙う\nさとしくんのことが好き',x:0,y:0,img:null,ix:0,iy:0,is:1.2},
-    {id:4,name:'思考囲い',   desc:'黒1マナ\nプレイヤー1人を対象とする。\nそのプレイヤーは自分の手札を公開する。',x:0,y:0,img:null,ix:0,iy:0,is:1.2},
+    {id:1,name:'さとしくん',  desc:'かわいい少年\nお姉さんのことが好き',              x:0,y:0,img:null,imgUrl:'',ix:0,iy:0,is:1.2},
+    {id:2,name:'お姉さん',   desc:'さとしくんの絶望する\n姿を見たい性格破綻者\nさとしくんのことが好き',x:0,y:0,img:null,imgUrl:'',ix:0,iy:0,is:1.2},
+    {id:3,name:'たかしくん', desc:'さとしくんの絶望する\n姿を見たい性格破綻者\nそれ故にお姉さんを狙う\nさとしくんのことが好き',x:0,y:0,img:null,imgUrl:'',ix:0,iy:0,is:1.2},
+    {id:4,name:'思考囲い',   desc:'黒1マナ\nプレイヤー1人を対象とする。\nそのプレイヤーは自分の手札を公開する。',x:0,y:0,img:null,imgUrl:'',ix:0,iy:0,is:1.2},
   ],
   nid:5,
 };
 
 let ZL=1, pendId=null, imgDrag=null, cardDrag=null, rTimer=null;
 
-/* HELPERS */
-function clip(sh){return{circle:'circle(50% at 50% 50%)',square:'inset(0)',rounded:'inset(0 round 15px)',diamond:'polygon(50% 0%,100% 50%,50% 100%,0% 50%)',hexagon:'polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%)',shield:'polygon(50% 0%,95% 15%,95% 55%,50% 100%,5% 55%,5% 15%)',star:'polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)',oval:'ellipse(50% 40% at 50% 50%)'}[sh]||'circle(50% at 50% 50%)'}
+/* ═══════════════ HELPERS ═══════════════ */
+function clipCSS(sh){return{circle:'circle(50% at 50% 50%)',square:'inset(0)',rounded:'inset(0 round 15px)',diamond:'polygon(50% 0%,100% 50%,50% 100%,0% 50%)',hexagon:'polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%)',shield:'polygon(50% 0%,95% 15%,95% 55%,50% 100%,5% 55%,5% 15%)',star:'polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)',oval:'ellipse(50% 40% at 50% 50%)'}[sh]||'circle(50% at 50% 50%)'}
+function ff(t){return t==='serif'?"'Noto Serif JP',Georgia,serif":"'Noto Sans JP',Arial,sans-serif"}
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-function ff(t){return t==='serif'?"'Noto Serif JP',serif":"'Noto Sans JP',sans-serif"}
+function escQ(s){return esc(s).replace(/"/g,'&quot;')}
 function sched(){clearTimeout(rTimer);rTimer=setTimeout(render,90)}
 function qtitle(fn){const t=document.querySelector('.cv-title');if(t)fn(t)}
 function tg(gid,val){document.querySelectorAll(`#${gid} [data-v]`).forEach(el=>el.classList.toggle('on',el.dataset.v===val))}
 function tog(id){document.getElementById(id).classList.toggle('cls')}
+function imgSrc(c){return c.imgUrl||c.img||null}
 
-/* AUTO ARRANGE */
+/* ═══════════════ AUTO ARRANGE ═══════════════ */
 function autoArrange(){
-  const p=S.padding,nc=S.arrangeCols,g=S.gap;
-  const fOut=S.frameSz+S.borderW*2;
+  const p=S.padding,nc=S.arrangeCols,g=S.gap,bw=S.borderW,fsz=S.frameSz;
+  const fOut=fsz+bw*2;
   const colW=(S.cw-2*p-(nc-1)*g)/nc;
   const titleH=S.titleSz*1.7+p*1.5;
   const cardH=fOut+S.nameSz*2.8+S.descSz*7+30;
@@ -340,11 +402,11 @@ function autoArrange(){
   render();
 }
 
-/* RENDER */
+/* ═══════════════ RENDER ═══════════════ */
 function render(){
   const cv=document.getElementById('canvas');
   const bw=S.borderW,fsz=S.frameSz,out=fsz+bw*2;
-  const cp=clip(S.shape),cff=ff(S.cardFont),tff=ff(S.titleFont);
+  const cp=clipCSS(S.shape),cff=ff(S.cardFont),tff=ff(S.titleFont);
   cv.style.cssText=`width:${S.cw}px;height:${S.ch}px;background:${S.bgColor};font-family:${cff}`;
   let h='';
   // title
@@ -355,22 +417,23 @@ function render(){
   >${esc(S.title)}</div>`;
   // cards
   for(const c of S.chars){
+    const src=imgSrc(c);
+    const outerBg=bw>0?S.borderColor:'transparent';
+    const outerClip=bw>0?`clip-path:${cp};`:'';
     h+=`<div class="cv-card" data-id="${c.id}" style="left:${c.x}px;top:${c.y}px;width:${out}px;">`;
     h+=`<button class="c-del noprint" onclick="delChar(${c.id},event)">×</button>`;
     h+=`<div class="c-handle noprint" data-id="${c.id}">⠿ ⠿ ⠿</div>`;
-    // frame
-    const outerBg=bw>0?S.borderColor:'transparent';
-    h+=`<div class="cv-fo" data-id="${c.id}" onclick="frameClick(${c.id},event)" onwheel="frameWheel(${c.id},event)" style="width:${out}px;height:${out}px;background:${outerBg};clip-path:${bw>0?cp:'none'};">`;
-    h+=`<div class="cv-fi" data-id="${c.id}" style="inset:${bw}px;clip-path:${cp};background:${S.frameBg};">`;
-    if(c.img){
-      h+=`<img src="${c.img}" data-id="${c.id}" style="width:${Math.round(fsz*c.is)}px;top:50%;left:50%;transform:translate(calc(-50% + ${c.ix}px),calc(-50% + ${c.iy}px));" onmousedown="startImgDrag(${c.id},event)" ondblclick="clearImg(${c.id},event)" ondragstart="return false">`;
+    h+=`<div class="cv-fo" data-id="${c.id}" onclick="frameClick(${c.id},event)" onwheel="frameWheel(${c.id},event)" style="width:${out}px;height:${out}px;background:${outerBg};${outerClip}position:relative;">`;
+    h+=`<div class="cv-fi" data-id="${c.id}" style="top:${bw}px;left:${bw}px;width:${fsz}px;height:${fsz}px;clip-path:${cp};background:${S.frameBg};">`;
+    if(src){
+      const iw=Math.round(fsz*c.is);
+      h+=`<img src="${src}" data-id="${c.id}" style="width:${iw}px;top:50%;left:50%;transform:translate(calc(-50% + ${c.ix}px),calc(-50% + ${c.iy}px));" onmousedown="startImgDrag(${c.id},event)" ondblclick="clearImg(${c.id},event)" ondragstart="return false">`;
     }else{
       h+=`<div class="uph"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><span style="color:#bbb">クリックで<br>画像追加</span></div>`;
     }
     h+=`</div>`;
-    if(c.img)h+=`<div class="frep noprint" onclick="replaceImg(${c.id},event)">🔄</div>`;
+    if(src)h+=`<div class="frep noprint" onclick="replaceImg(${c.id},event)">🔄</div>`;
     h+=`</div>`;
-    // text
     h+=`<div class="cv-name" contenteditable="true" data-id="${c.id}" style="font-size:${S.nameSz}px;color:${S.nameColor};text-align:${S.textAlign};width:100%;" oninput="onName(${c.id},this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()}">${esc(c.name)}</div>`;
     h+=`<div class="cv-desc" contenteditable="true" data-id="${c.id}" style="font-size:${S.descSz}px;color:${S.descColor};text-align:${S.textAlign};width:100%;" oninput="onDesc(${c.id},this)" onkeydown="handleDescKey(event)">${esc(c.desc).replace(/\n/g,'<br>')}</div>`;
     h+=`</div>`;
@@ -379,12 +442,12 @@ function render(){
   renderSidebar();
 }
 
-/* SIDEBAR */
+/* ═══════════════ SIDEBAR ═══════════════ */
 function renderSidebar(){
   document.getElementById('charList').innerHTML=S.chars.map(c=>`
     <div class="crow" data-id="${c.id}">
       <div class="crow-top">
-        <div class="cthumb">${c.img?`<img src="${c.img}">`:'?'}</div>
+        <div class="cthumb">${imgSrc(c)?`<img src="${imgSrc(c)}">`:'?'}</div>
         <span class="cname-s">${esc(c.name)||'（無名稱）'}</span>
         <button class="cdel" onclick="delChar(${c.id},event)">×</button>
       </div>
@@ -392,67 +455,70 @@ function renderSidebar(){
         <label>X</label><input type="number" id="xi${c.id}" value="${Math.round(c.x)}" onchange="setCP(${c.id},'x',+this.value)">
         <label>Y</label><input type="number" id="yi${c.id}" value="${Math.round(c.y)}" onchange="setCP(${c.id},'y',+this.value)">
       </div>
+      <div class="crow-url">
+        <label>URL</label>
+        <input type="text" value="${escQ(c.imgUrl||'')}" placeholder="https://… 或相對路徑" onblur="setImgUrl(${c.id},this.value)" onkeydown="if(event.key==='Enter')this.blur()">
+        <button class="ub" onclick="pickFile(${c.id})" title="上傳本機圖片">📁</button>
+      </div>
     </div>
   `).join('');
 }
 
-function setCP(id,ax,v){
-  const c=S.chars.find(c=>c.id===id);if(!c)return;
-  c[ax]=v;
-  const el=document.querySelector(`.cv-card[data-id="${id}"]`);
-  if(el)el.style[ax==='x'?'left':'top']=v+'px';
-}
+function setCP(id,ax,v){const c=S.chars.find(c=>c.id===id);if(!c)return;c[ax]=v;const el=document.querySelector(`.cv-card[data-id="${id}"]`);if(el)el.style[ax==='x'?'left':'top']=v+'px'}
+function refreshXY(id){const c=S.chars.find(c=>c.id===id);if(!c)return;const xi=document.getElementById('xi'+id),yi=document.getElementById('yi'+id);if(xi)xi.value=Math.round(c.x);if(yi)yi.value=Math.round(c.y)}
 
-function refreshXY(id){
-  const c=S.chars.find(c=>c.id===id);if(!c)return;
-  const xi=document.getElementById('xi'+id),yi=document.getElementById('yi'+id);
-  if(xi)xi.value=Math.round(c.x);if(yi)yi.value=Math.round(c.y);
-}
-
-/* CHAR */
-function addChar(){
-  S.chars.push({id:S.nid++,name:'新キャラ',desc:'説明文',x:S.padding,y:S.padding+100,img:null,ix:0,iy:0,is:1.2});
-  render();
-}
-function delChar(id,e){
-  if(e)e.stopPropagation();
-  if(S.chars.length<=1)return;
-  S.chars=S.chars.filter(c=>c.id!==id);render();
-}
+/* ═══════════════ CHAR ACTIONS ═══════════════ */
+function addChar(){S.chars.push({id:S.nid++,name:'新キャラ',desc:'説明文',x:S.padding,y:S.padding+100,img:null,imgUrl:'',ix:0,iy:0,is:1.2});render()}
+function delChar(id,e){if(e)e.stopPropagation();if(S.chars.length<=1)return;S.chars=S.chars.filter(c=>c.id!==id);render()}
 function onName(id,el){const c=S.chars.find(c=>c.id===id);if(c){c.name=el.innerText;renderSidebar()}}
 function onDesc(id,el){const c=S.chars.find(c=>c.id===id);if(c)c.desc=el.innerText}
 function handleDescKey(e){if(e.key==='Enter'){e.preventDefault();document.execCommand('insertHTML',false,'<br>')}}
 
-/* IMAGE */
-function frameClick(id,e){if(e.target.tagName==='IMG')return;pendId=id;document.getElementById('fileInput').click();e.stopPropagation()}
-function replaceImg(id,e){e.stopPropagation();pendId=id;document.getElementById('fileInput').click()}
-function clearImg(id,e){if(e)e.stopPropagation();const c=S.chars.find(c=>c.id===id);if(c){c.img=null;c.ix=0;c.iy=0;c.is=1.2;render()}}
+/* ═══════════════ IMAGE ═══════════════ */
+function pickFile(id){pendId=id;document.getElementById('fileInput').click()}
+function frameClick(id,e){if(e.target.tagName==='IMG')return;pickFile(id);e.stopPropagation()}
+function replaceImg(id,e){e.stopPropagation();pickFile(id)}
+function clearImg(id,e){if(e)e.stopPropagation();const c=S.chars.find(c=>c.id===id);if(c){c.img=null;c.imgUrl='';c.ix=0;c.iy=0;c.is=1.2;render()}}
+function setImgUrl(id,url){
+  const c=S.chars.find(c=>c.id===id);if(!c)return;
+  url=url.trim();
+  c.imgUrl=url;
+  if(url){c.img=null} // URL takes priority; clear any uploaded file
+  // update card image live
+  const fi=document.querySelector(`.cv-fi[data-id="${id}"]`);
+  if(!fi)return render();
+  if(url){
+    let img=fi.querySelector('img');
+    if(img){img.src=url}else{render()}
+  }else{render()}
+  // update sidebar thumb
+  const thumb=document.querySelector(`.crow[data-id="${id}"] .cthumb`);
+  if(thumb)thumb.innerHTML=imgSrc(c)?`<img src="${imgSrc(c)}">`:'?';
+}
+
 document.getElementById('fileInput').addEventListener('change',function(e){
   const file=e.target.files[0];if(!file||pendId===null)return;
   const r=new FileReader();
-  r.onload=ev=>{const c=S.chars.find(c=>c.id===pendId);if(c){c.img=ev.target.result;c.ix=0;c.iy=0;c.is=1.2;render()}pendId=null};
+  r.onload=ev=>{const c=S.chars.find(c=>c.id===pendId);if(c){c.img=ev.target.result;c.imgUrl='';c.ix=0;c.iy=0;c.is=1.2;render()}pendId=null};
   r.readAsDataURL(file);this.value='';
 });
+
 function startImgDrag(id,e){
   const c=S.chars.find(c=>c.id===id);if(!c)return;
   e.preventDefault();e.stopPropagation();e.target.classList.add('drag');
   imgDrag={id,sx:e.clientX,sy:e.clientY,ox:c.ix,oy:c.iy};
 }
 function frameWheel(id,e){
-  e.preventDefault();const c=S.chars.find(c=>c.id===id);if(!c||!c.img)return;
+  e.preventDefault();const c=S.chars.find(c=>c.id===id);if(!c||!imgSrc(c))return;
   c.is=Math.max(.2,Math.min(6,c.is+(e.deltaY>0?-.06:.06)));
   const img=document.querySelector(`.cv-fi[data-id="${id}"] img`);
   if(img)img.style.width=Math.round(S.frameSz*c.is)+'px';
 }
 
-/* MOUSE EVENTS */
+/* ═══════════════ MOUSE EVENTS ═══════════════ */
 document.addEventListener('mousedown',e=>{
   const h=e.target.closest('.c-handle');
-  if(h){
-    const id=parseInt(h.dataset.id);const c=S.chars.find(c=>c.id===id);if(!c)return;
-    e.preventDefault();
-    cardDrag={id,sx:e.clientX,sy:e.clientY,ox:c.x,oy:c.y};
-  }
+  if(h){const id=parseInt(h.dataset.id);const c=S.chars.find(c=>c.id===id);if(!c)return;e.preventDefault();cardDrag={id,sx:e.clientX,sy:e.clientY,ox:c.x,oy:c.y};return}
 });
 document.addEventListener('mousemove',e=>{
   if(cardDrag){
@@ -471,45 +537,210 @@ document.addEventListener('mousemove',e=>{
     if(img)img.style.transform=`translate(calc(-50% + ${c.ix}px),calc(-50% + ${c.iy}px))`;
   }
 });
-document.addEventListener('mouseup',()=>{
-  document.querySelectorAll('.cv-fi img').forEach(el=>el.classList.remove('drag'));
-  cardDrag=null;imgDrag=null;
-});
+document.addEventListener('mouseup',()=>{document.querySelectorAll('.cv-fi img').forEach(el=>el.classList.remove('drag'));cardDrag=null;imgDrag=null});
 
-/* FRAME SIZE & BORDER WIDTH — require full re-render */
+/* ═══════════════ FRAME SETTINGS ═══════════════ */
 function upd_fsz(v){S.frameSz=parseInt(v);document.getElementById('fszV').textContent=v;sched()}
 function upd_bw(v){S.borderW=parseInt(v);document.getElementById('bwV').textContent=v;sched()}
 function setShape(v){S.shape=v;tg('shpG',v);sched()}
 
-/* CANVAS SIZE */
+/* ═══════════════ CANVAS SETTINGS ═══════════════ */
 const PRE={a4p:[794,1123],a4l:[1123,794],a3p:[1123,1587],b5:[668,944],sq:[800,800]};
-function applyPreset(v){
-  document.getElementById('csz').style.display=v==='custom'?'flex':'none';
-  if(v!=='custom'&&PRE[v]){[S.cw,S.ch]=PRE[v];document.getElementById('cwi').value=S.cw;document.getElementById('chi').value=S.ch;autoArrange();if(document.getElementById('zsel').value==='fit')doFit()}
-}
+function applyPreset(v){document.getElementById('csz').style.display=v==='custom'?'flex':'none';if(v!=='custom'&&PRE[v]){[S.cw,S.ch]=PRE[v];document.getElementById('cwi').value=S.cw;document.getElementById('chi').value=S.ch;autoArrange();if(document.getElementById('zsel').value==='fit')doFit()}}
 function applyCustom(){S.cw=parseInt(document.getElementById('cwi').value)||794;S.ch=parseInt(document.getElementById('chi').value)||1123;render();if(document.getElementById('zsel').value==='fit')doFit()}
 function lv_bg(v){S.bgColor=v;document.getElementById('canvas').style.background=v}
 function lv_pad(v){S.padding=parseInt(v);document.getElementById('padV').textContent=v;qtitle(t=>t.style.padding=`${S.padding}px ${S.padding}px ${Math.round(S.padding*.35)}px`)}
 function lv_titleText(v){S.title=v;qtitle(t=>{if(t.innerText.trim()!==v.trim())t.innerText=v})}
 
-/* ZOOM */
+/* ═══════════════ ZOOM ═══════════════ */
 function setZoom(v){if(v==='fit')doFit();else applyZoom(parseFloat(v))}
 function applyZoom(s){ZL=s;document.getElementById('canvas-wrap').style.zoom=s}
 function doFit(){const a=document.getElementById('canvas-area');const s=Math.min((a.clientWidth-72)/S.cw,(a.clientHeight-72)/S.ch,1);applyZoom(Math.max(.2,s))}
 
-/* EXPORT */
-async function exportPNG(){
+/* ═══════════════════════════════════════
+   EXPORT FUNCTIONS
+═══════════════════════════════════════ */
+
+/* — PNG / JPG (bitmap via html2canvas) — */
+async function exportBitmap(fmt){
   document.querySelectorAll('.noprint').forEach(el=>el.style.visibility='hidden');
   const w=document.getElementById('canvas-wrap'),pz=w.style.zoom;w.style.zoom='1';
   await new Promise(r=>setTimeout(r,100));
   try{
     const cvs=await html2canvas(document.getElementById('canvas'),{scale:2,backgroundColor:S.bgColor,width:S.cw,height:S.ch,useCORS:true,allowTaint:true});
-    const a=document.createElement('a');a.download='登場人物紹介.png';a.href=cvs.toDataURL('image/png');a.click();
+    const mime=fmt==='jpg'?'image/jpeg':'image/png';
+    const q=fmt==='jpg'?0.92:1;
+    const a=document.createElement('a');a.download=`登場人物紹介.${fmt}`;a.href=cvs.toDataURL(mime,q);a.click();
   }catch(err){alert('匯出失敗，請使用列印。\n'+err.message)}
   w.style.zoom=pz;document.querySelectorAll('.noprint').forEach(el=>el.style.visibility='');
 }
+function exportPNG(){exportBitmap('png')}
+function exportJPG(){exportBitmap('jpg')}
 
-/* INIT */
+/* — SVG (vector, generated from state) — */
+function svgEl(sh,x,y,sz,attrs){
+  const cx=+(x+sz/2).toFixed(2),cy=+(y+sz/2).toFixed(2);
+  const p2=pts=>pts.map(([px,py])=>`${+(x+px*sz).toFixed(2)},${+(y+py*sz).toFixed(2)}`).join(' ');
+  const at=attrs?' '+attrs:'';
+  switch(sh){
+    case 'circle':  return `<circle cx="${cx}" cy="${cy}" r="${(sz/2).toFixed(2)}"${at}/>`;
+    case 'square':  return `<rect x="${x}" y="${y}" width="${sz}" height="${sz}"${at}/>`;
+    case 'rounded': return `<rect x="${x}" y="${y}" width="${sz}" height="${sz}" rx="${(sz*15/160).toFixed(1)}"${at}/>`;
+    case 'diamond': return `<polygon points="${p2([[.5,0],[1,.5],[.5,1],[0,.5]])}"${at}/>`;
+    case 'hexagon': return `<polygon points="${p2([[.25,0],[.75,0],[1,.5],[.75,1],[.25,1],[0,.5]])}"${at}/>`;
+    case 'shield':  return `<polygon points="${p2([[.5,0],[.95,.15],[.95,.55],[.5,1],[.05,.55],[.05,.15]])}"${at}/>`;
+    case 'star':    return `<polygon points="${p2([[.5,0],[.61,.35],[.98,.35],[.68,.57],[.79,.91],[.5,.7],[.21,.91],[.32,.57],[.02,.35],[.39,.35]])}"${at}/>`;
+    case 'oval':    return `<ellipse cx="${cx}" cy="${cy}" rx="${(sz/2).toFixed(2)}" ry="${(sz*0.4).toFixed(2)}"${at}/>`;
+    default:        return `<circle cx="${cx}" cy="${cy}" r="${(sz/2).toFixed(2)}"${at}/>`;
+  }
+}
+
+function generateSVGStr(){
+  const bw=S.borderW,fsz=S.frameSz,out=fsz+bw*2;
+  const cff=ff(S.cardFont).replace(/'/g,'"');
+  const tff=ff(S.titleFont).replace(/'/g,'"');
+  let defs='',bd='';
+  bd+=`<rect width="${S.cw}" height="${S.ch}" fill="${S.bgColor}"/>`;
+  // title
+  const tx=S.titleAlign==='center'?S.cw/2:S.titleAlign==='right'?S.cw-S.padding:S.padding;
+  const ta=S.titleAlign==='center'?'middle':S.titleAlign==='right'?'end':'start';
+  bd+=`<text x="${tx}" y="${S.padding+S.titleSz}" font-family="${tff}" font-size="${S.titleSz}" font-weight="${S.titleWeight}" fill="${S.titleColor}" text-anchor="${ta}">${esc(S.title)}</text>`;
+  // cards
+  for(const c of S.chars){
+    const src=imgSrc(c);
+    const ix=c.x+bw,iy=c.y+bw;
+    const cid=`clip${c.id}`;
+    defs+=`<clipPath id="${cid}">${svgEl(S.shape,ix,iy,fsz)}</clipPath>`;
+    if(bw>0)bd+=svgEl(S.shape,c.x,c.y,out,`fill="${S.borderColor}"`);
+    bd+=`<g clip-path="url(#${cid})">`;
+    bd+=`<rect x="${ix}" y="${iy}" width="${fsz}" height="${fsz}" fill="${S.frameBg}"/>`;
+    if(src){
+      const iw=Math.round(fsz*c.is);
+      const imgX=(ix+fsz/2-iw/2+c.ix).toFixed(2),imgY=(iy+fsz/2-iw/2+c.iy).toFixed(2);
+      bd+=`<image href="${src}" x="${imgX}" y="${imgY}" width="${iw}" height="${iw}" preserveAspectRatio="xMidYMid slice"/>`;
+    }
+    bd+=`</g>`;
+    // text
+    const textX=c.x+out/2;
+    const ta2=S.textAlign==='center'?'middle':S.textAlign==='right'?'end':'start';
+    bd+=`<text x="${textX}" y="${c.y+out+S.nameSz+8}" font-family="${cff}" font-size="${S.nameSz}" font-weight="700" fill="${S.nameColor}" text-anchor="${ta2}">${esc(c.name)}</text>`;
+    let dy=c.y+out+S.nameSz+8+S.nameSz*1.2+S.descSz;
+    for(const line of c.desc.split('\n')){
+      bd+=`<text x="${textX}" y="${dy.toFixed(1)}" font-family="${cff}" font-size="${S.descSz}" fill="${S.descColor}" text-anchor="${ta2}">${esc(line)}</text>`;
+      dy+=S.descSz*1.75;
+    }
+  }
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${S.cw}" height="${S.ch}" viewBox="0 0 ${S.cw} ${S.ch}"><defs>${defs}</defs>${bd}</svg>`;
+}
+
+function exportSVG(){
+  const svgStr=generateSVGStr();
+  const blob=new Blob([svgStr],{type:'image/svg+xml;charset=utf-8'});
+  const a=document.createElement('a');a.download='登場人物紹介.svg';a.href=URL.createObjectURL(blob);a.click();URL.revokeObjectURL(a.href);
+}
+
+/* — JSON save / load — */
+function saveJSON(){
+  const data=JSON.stringify(S,null,2);
+  const blob=new Blob([data],{type:'application/json'});
+  const a=document.createElement('a');a.download='manga-editor-config.json';a.href=URL.createObjectURL(blob);a.click();URL.revokeObjectURL(a.href);
+}
+
+document.getElementById('jsonInput').addEventListener('change',function(e){
+  const file=e.target.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    try{
+      const loaded=JSON.parse(ev.target.result);
+      // Restore state fields
+      const keys=['cw','ch','bgColor','padding','gap','arrangeCols','title','titleSz','titleColor','titleAlign','titleFont','titleWeight','shape','frameSz','borderW','borderColor','frameBg','nameSz','nameColor','descSz','descColor','textAlign','cardFont','nid'];
+      keys.forEach(k=>{if(loaded[k]!==undefined)S[k]=loaded[k]});
+      if(Array.isArray(loaded.chars))S.chars=loaded.chars.map(c=>({imgUrl:'',ix:0,iy:0,is:1.2,...c}));
+      syncUI();render();
+    }catch(err){alert('JSON 載入失敗：'+err.message)}
+  };
+  r.readAsText(file);this.value='';
+});
+
+function syncUI(){
+  const sv=(id,v)=>{const el=document.getElementById(id);if(el)el.value=v};
+  const st=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v};
+  sv('bgcp',S.bgColor);sv('padR',S.padding);st('padV',S.padding);
+  sv('gapR',S.gap);st('gapV',S.gap);
+  sv('titleInp',S.title);sv('tcp',S.titleColor);sv('tszR',S.titleSz);st('tszV',S.titleSz);
+  sv('fszR',S.frameSz);st('fszV',S.frameSz);sv('bwR',S.borderW);st('bwV',S.borderW);
+  sv('bcp',S.borderColor);sv('fbgp',S.frameBg);
+  sv('nszR',S.nameSz);st('nszV',S.nameSz);sv('ncp',S.nameColor);
+  sv('dszR',S.descSz);st('dszV',S.descSz);sv('dcp',S.descColor);
+  ['taG','tfG','twG','colsG','shpG','txaG','cfG'].forEach(g=>{
+    const key={taG:'titleAlign',tfG:'titleFont',twG:'titleWeight',colsG:'arrangeCols',shpG:'shape',txaG:'textAlign',cfG:'cardFont'}[g];
+    if(key)tg(g,String(S[key]));
+  });
+}
+
+/* — Caveduck HTML output — */
+function generateCaveduckHTML(){
+  const bw=S.borderW,fsz=S.frameSz,out=fsz+bw*2;
+  const toR=v=>Math.round(v/16*1000)/1000+'rem';
+  const cp=clipCSS(S.shape);
+  const cff=ff(S.cardFont).replace(/'/g,'"');
+  const tff=ff(S.titleFont).replace(/'/g,'"');
+  const ta=S.textAlign;
+  let h='';
+
+  h+=`<div style="position:relative;width:${S.cw}px;height:${S.ch}px;background:${S.bgColor};overflow:hidden;font-family:${cff};">`;
+
+  // title
+  const tpad=`${toR(S.padding)} ${toR(S.padding)} ${toR(Math.round(S.padding*.35))}`;
+  h+=`<div style="font-size:${toR(S.titleSz)};color:${S.titleColor};text-align:${S.titleAlign};font-family:${tff};font-weight:${S.titleWeight};padding:${tpad};line-height:1.3;">${esc(S.title)}</div>`;
+
+  for(const c of S.chars){
+    const src=imgSrc(c);
+    h+=`<div style="position:absolute;left:${c.x}px;top:${c.y}px;width:${out}px;text-align:${ta};">`;
+
+    // frame outer (border)
+    const foStyle=bw>0
+      ?`position:relative;width:${out}px;height:${out}px;background:${S.borderColor};clip-path:${cp};`
+      :`position:relative;width:${out}px;height:${out}px;`;
+    h+=`<div style="${foStyle}">`;
+
+    // frame inner
+    h+=`<div style="position:absolute;top:${bw}px;left:${bw}px;width:${fsz}px;height:${fsz}px;clip-path:${cp};background:${S.frameBg};overflow:hidden;">`;
+    if(src){
+      const iw=Math.round(fsz*c.is);
+      h+=`<img src="${src}" style="position:absolute;top:50%;left:50%;transform:translate(calc(-50% + ${c.ix.toFixed(1)}px),calc(-50% + ${c.iy.toFixed(1)}px));width:${iw}px;max-width:none;">`;
+    }
+    h+=`</div></div>`; // inner, outer
+
+    // name
+    h+=`<div style="font-size:${toR(S.nameSz)};color:${S.nameColor};font-weight:700;margin-top:${toR(8)};">${esc(c.name)}</div>`;
+    // desc
+    const descHtml=esc(c.desc).replace(/\n/g,'<br>');
+    h+=`<div style="font-size:${toR(S.descSz)};color:${S.descColor};line-height:1.75;margin-top:${toR(4)};">${descHtml}</div>`;
+
+    h+=`</div>`; // card
+  }
+  h+=`</div>`; // container
+  return h;
+}
+
+function showHTMLModal(){
+  document.getElementById('htmlOut').value=generateCaveduckHTML();
+  document.getElementById('hModal').style.display='flex';
+  document.getElementById('copyMsg').style.display='none';
+}
+function closeModal(){document.getElementById('hModal').style.display='none'}
+async function copyHTML(){
+  try{
+    await navigator.clipboard.writeText(document.getElementById('htmlOut').value);
+    const msg=document.getElementById('copyMsg');msg.style.display='inline';setTimeout(()=>msg.style.display='none',2000);
+  }catch(e){document.getElementById('htmlOut').select();document.execCommand('copy')}
+}
+
+// close modal on backdrop click
+document.getElementById('hModal').addEventListener('click',function(e){if(e.target===this)closeModal()});
+
+/* ═══════════════ INIT ═══════════════ */
 window.addEventListener('load',()=>{autoArrange();doFit();document.getElementById('zsel').value='fit'});
 window.addEventListener('resize',()=>{if(document.getElementById('zsel').value==='fit')doFit()});
 </script>
