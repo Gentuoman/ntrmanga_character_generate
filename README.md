@@ -7,25 +7,6 @@
 
 ---
 
-## 🚀 快速開始
-
-### GitHub Pages 部署
-
-1. 將 `manga-character-editor.html` 推送到你的 GitHub Repository
-2. 進入 **Settings → Pages → Source**，選擇對應分支
-3. 用瀏覽器開啟生成的網址即可使用
-
-### 本機直接開啟
-
-```
-直接用瀏覽器開啟 manga-character-editor.html
-（雙擊或拖曳到瀏覽器視窗）
-```
-
-> ✅ 相容 Chrome、Edge、Firefox、Safari 最新版本
-
----
-
 ## 🖼 介面概覽
 
 ```
