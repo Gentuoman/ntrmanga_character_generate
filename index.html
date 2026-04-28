@@ -84,6 +84,12 @@ select.zsel{background:var(--surface);border:1px solid var(--border);color:var(-
 .crow-url input:focus{border-color:var(--accent)}
 .crow-url .ub{background:var(--surface);border:1px solid var(--border);color:var(--dim);padding:3px 6px;border-radius:4px;cursor:pointer;font-size:12px;flex-shrink:0;transition:all .12s}
 .crow-url .ub:hover{color:var(--text);border-color:#b0aed0}
+.crow-scale{display:flex;align-items:center;gap:6px;margin-top:5px;padding-top:5px;border-top:1px solid var(--border)}
+.crow-scale label{font-size:10px;color:var(--dim);font-weight:700;flex-shrink:0}
+.crow-scale input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer}
+.crow-scale .sv{font-size:10px;color:var(--dim);min-width:36px;text-align:right;flex-shrink:0}
+.crow-scale .rst{background:none;border:1px solid var(--border);color:var(--dim);border-radius:3px;padding:1px 5px;font-size:10px;cursor:pointer;flex-shrink:0;line-height:1.4;transition:all .12s}
+.crow-scale .rst:hover{color:var(--text);border-color:#b0aed0}
 
 /* EXPORT section */
 .exp-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
@@ -460,12 +466,40 @@ function renderSidebar(){
         <input type="text" value="${escQ(c.imgUrl||'')}" placeholder="https://… 或相對路徑" onblur="setImgUrl(${c.id},this.value)" onkeydown="if(event.key==='Enter')this.blur()">
         <button class="ub" onclick="pickFile(${c.id})" title="上傳本機圖片">📁</button>
       </div>
+      <div class="crow-scale">
+        <label>縮放</label>
+        <input type="range" id="scr${c.id}" min="20" max="600" step="1" value="${Math.round(c.is*100)}" oninput="setImgScale(${c.id},this.value)">
+        <span class="sv" id="sv${c.id}">${Math.round(c.is*100)}%</span>
+        <button class="rst" onclick="resetImgScale(${c.id})" title="重設為 120%">↺</button>
+      </div>
     </div>
   `).join('');
 }
 
 function setCP(id,ax,v){const c=S.chars.find(c=>c.id===id);if(!c)return;c[ax]=v;const el=document.querySelector(`.cv-card[data-id="${id}"]`);if(el)el.style[ax==='x'?'left':'top']=v+'px'}
 function refreshXY(id){const c=S.chars.find(c=>c.id===id);if(!c)return;const xi=document.getElementById('xi'+id),yi=document.getElementById('yi'+id);if(xi)xi.value=Math.round(c.x);if(yi)yi.value=Math.round(c.y)}
+
+function setImgScale(id,val){
+  const c=S.chars.find(c=>c.id===id);if(!c)return;
+  c.is=parseInt(val)/100;
+  const img=document.querySelector(`.cv-fi[data-id="${id}"] img`);
+  if(img)img.style.width=Math.round(S.frameSz*c.is)+'px';
+  const sv=document.getElementById('sv'+id);if(sv)sv.textContent=val+'%';
+}
+function resetImgScale(id){
+  const c=S.chars.find(c=>c.id===id);if(!c)return;
+  c.is=1.2;
+  const img=document.querySelector(`.cv-fi[data-id="${id}"] img`);
+  if(img)img.style.width=Math.round(S.frameSz*1.2)+'px';
+  const sl=document.getElementById('scr'+id),sv=document.getElementById('sv'+id);
+  if(sl)sl.value=120;if(sv)sv.textContent='120%';
+}
+function syncScale(id){
+  const c=S.chars.find(c=>c.id===id);if(!c)return;
+  const pct=Math.round(c.is*100);
+  const sl=document.getElementById('scr'+id),sv=document.getElementById('sv'+id);
+  if(sl)sl.value=pct;if(sv)sv.textContent=pct+'%';
+}
 
 /* ═══════════════ CHAR ACTIONS ═══════════════ */
 function addChar(){S.chars.push({id:S.nid++,name:'新キャラ',desc:'説明文',x:S.padding,y:S.padding+100,img:null,imgUrl:'',ix:0,iy:0,is:1.2});render()}
@@ -513,6 +547,7 @@ function frameWheel(id,e){
   c.is=Math.max(.2,Math.min(6,c.is+(e.deltaY>0?-.06:.06)));
   const img=document.querySelector(`.cv-fi[data-id="${id}"] img`);
   if(img)img.style.width=Math.round(S.frameSz*c.is)+'px';
+  syncScale(id);
 }
 
 /* ═══════════════ MOUSE EVENTS ═══════════════ */
